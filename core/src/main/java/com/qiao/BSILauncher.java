@@ -47,7 +47,11 @@ public class BSILauncher {
 
         Object vmObj = null;
         try {
+            System.out.println("PID = " + configure.getJavaPid());
             vmObj = vmClass.getMethod("attach", String.class).invoke(null, "" + configure.getJavaPid());
+            System.out.println("configure.getBsiAgent() = " + configure.getBsiAgent());
+            System.out.println("configure.getBsiCore() = " + configure.getBsiCore());
+            System.out.println("configure.toString() = " + configure.toString());
             vmClass.getMethod("loadAgent", String.class, String.class).invoke(vmObj, configure.getBsiAgent(), configure.getBsiCore() + ";" + configure.toString());
         } finally {
             if (null != vmObj) {
