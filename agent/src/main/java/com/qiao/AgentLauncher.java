@@ -26,11 +26,13 @@ public class AgentLauncher {
 
         Class bsiServerClass = classLoader.loadClass("com.qiao.server.BSIServer");
         Method method = bsiServerClass.getMethod("toString");
-        method.invoke(bsiServerClass);
+        Object bsiServerInstance = bsiServerClass.newInstance();
+        Object result = method.invoke(bsiServerInstance);
+        System.out.println("Test result = " + result);
     }
 
-    private static ClassLoader loadOrDefineClassLoader(String agentJar) throws MalformedURLException {
-        ClassLoader classLoader = new AgentClassLoader(agentJar);
+    private static ClassLoader loadOrDefineClassLoader(String coreJar) throws MalformedURLException {
+        ClassLoader classLoader = new AgentClassLoader(coreJar);
         return classLoader;
     }
 

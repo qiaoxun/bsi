@@ -6,12 +6,14 @@ import java.net.URLClassLoader;
 
 public class AgentClassLoader extends URLClassLoader {
 
-    public AgentClassLoader(final String agentJar) throws MalformedURLException {
-        super(new URL[]{ new URL("file:" + agentJar) });
+    public AgentClassLoader(final String coreJar) throws MalformedURLException {
+        super(new URL[]{ new URL("file:" + coreJar) });
+        System.out.println("AgentClassLoader coreJar = " + coreJar);
     }
 
     @Override
     protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        System.out.println("loadClass name = " + name + ", resolve = " + resolve);
         Class<?> loadedClass = findLoadedClass(name);
 
         if (null != loadedClass) {
@@ -20,13 +22,15 @@ public class AgentClassLoader extends URLClassLoader {
 
         try {
             Class<?> aClass = findClass(name);
+            System.out.println("loadClass aClass = " + aClass);
             if (resolve) {
                 resolveClass(aClass);
             }
             return aClass;
         } catch (Exception e) {
-            e.printStackTrace();
-            return super.loadClass(name, resolve);
+            Class result = super.loadClass(name, resolve);
+            System.out.println("inside exception result = " + result);
+            return result;
         }
     }
 }
