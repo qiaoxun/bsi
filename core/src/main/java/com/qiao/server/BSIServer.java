@@ -93,9 +93,25 @@ public class BSIServer {
     }
 
     private void doRead(ByteBuffer byteBuffer, SelectionKey selectionKey) {
+
+        SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+        try {
+            if (EOF == socketChannel.read(byteBuffer)) {
+                return;
+            }
+            byteBuffer.flip();
+            while (byteBuffer.hasRemaining()) {
+                final byte data = byteBuffer.get();
+                System.out.println("data = " + data);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    private void doAccept(SelectionKey selectionKey, Selector selector, Configure configure) {
+    private void doAccept(SelectionKey selectionKey, Selector selector, Configure configure) throws IOException {
         final ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
         acceptSocketChannel(selector, serverSocketChannel, configure);
     }
